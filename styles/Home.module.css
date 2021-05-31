@@ -8,6 +8,21 @@
   height: 100vh;
 }
 
+.colcontainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.rowcontainer {
+  min-width: 70vh;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+
 .main {
   padding: 5rem 0;
   flex: 1;
