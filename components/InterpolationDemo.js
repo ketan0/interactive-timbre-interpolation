@@ -27,7 +27,7 @@ const InterpolationDemo = () => {
     updateAudioPlayback()
   }, [sourceInstrument])
 
-  const instruments = Object.keys(INSTRUMENT_SHORT_NAMES)
+  const instruments = Object.keys(INSTRUMENT_SHORT_NAMES).filter(value => value !== 'Saxophone')
   const sourceInstrumentShort = INSTRUMENT_SHORT_NAMES[sourceInstrument]
   const targetInstrumentShort = INSTRUMENT_SHORT_NAMES[targetInstrument]
   const filenameNoExt = `/interpolation_samples/${sourceInstrumentShort}_${targetInstrumentShort}_${alphaString}_${currentNote}`
