@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import Image from 'next/image'
+import Link from 'next/link'
 import InterpolationDemo from '../components/InterpolationDemo'
 import ZTraversalDemo from '../components/ZTraversalDemo'
 import styles from '../styles/Home.module.css'
@@ -20,8 +21,92 @@ export default function Home() {
 
         <p className={styles.description}>Ketan Agrawal &bull; Music 220c Final Project</p>
 
-        <InterpolationDemo />
-        <ZTraversalDemo />
+        <div className={styles.rowcontainer}>
+          <div style={{ 'marginRight': '1rem' }}>
+            <InterpolationDemo />
+            <ZTraversalDemo />
+          </div>
+          <div style={{ 'marginLeft': '1rem' }}>
+            <h2>Abstract</h2>
+            <p>
+              The space of human-AI co-creation of content is ripe with
+              possibility; however, many state-of-the-art ML systems
+              today act as “black boxes” that don’t afford end-users any control
+              over their outputs. In the context of creativity, we desire ML
+              systems that are both expressive in their outputs and controllable
+              by an end-user. Specifically in the context of music generation,
+              current models are designed more for listeners than composers.
+              While generative models such as&nbsp;
+              <Link
+                href="https://openai.com/blog/musenet/"><a>Musenet</a></Link> and&nbsp;
+              <Link
+                href="https://magenta.tensorflow.org/gansynth"><a>GANSynth</a></Link>
+              &nbsp;can create outputs with impressive harmonies, rhythms, and styles,
+              they lack any method for the user to refine those features. If the
+              user doesn’t like the musical output, their only option is to
+              re-generate, producing a completely different composition.
+              Moreover, changing the way these models generate output requires
+              machine learning experience and hours of training time, which is
+              not feasible for composers.
+            </p>
+            <p>
+              The work presented here represents a step towards AI music
+              generation that is controllable along high-level perceptual
+              dimensions. At the moment, the model used to produce these sounds
+              uses an architecture that separately represents pitch and timbre
+              in its latent space. In the future, I look to extend this to
+              represent other, more high-level perceptual features in the latent
+              space.
+            </p>
+
+            <h2>Demo</h2>
+            <p>
+              The timbre interpolation samples here were generated using a Gaussian
+              mixture VAE, using the <Link
+                href="https://github.com/yjlolo/gmvae-synth"><a>code
+                  supplement</a></Link> to the paper&nbsp;
+              <Link href="https://arxiv.org/abs/1906.08152?fbclid=IwAR3yBPx71nPt0uO6GjVqdJxQxzStiyz3osf6mFUCW_cMIarwykZM5_tfUpU">
+                <a>
+                  Learning Disentangled Representations of Timbre and Pitch for
+                  Musical Instrument Sounds Using Gaussian Mixture Variational
+                  Autoencoders.
+                </a>
+              </Link>
+              In order to generate the interpolation samples, we start with a "source"
+              recording, computing its vector representation, and then adding to some
+              fraction of the vector distance between the source and target distribution
+              means:
+
+
+            </p>
+            <Image src="/rendered_image.png" alt="z_t = z_s + alpha * (mu_source - mu_target)" width={415} height={34} />
+            <p>
+              Such interpolations are presented for a small selection of
+              intsruments in the "Timbre Interpolation" demo.
+            </p>
+            <p>
+              The latent space (z) is composed of 16 separate dimensions.
+              Sometimes, varying the value along one of those dimensions
+              produces perceptually interesting results, as can be seen in the
+              "Latent Space Traversal" demo.
+            </p>
+            <p>
+              <em>Sidebar:</em> Initially, I focused on training VAEs using modules from
+              the <Link href="https://magenta.tensorflow.org/ddsp"><a>DDSP</a></Link> toolkit; since these neural network
+              architectures have traditional synthesizers embedded into them,
+              the space that they have to learn (synthesizer control parameter
+              space) is much smaller than that of direct waveform generation
+              models, thus allowing models to be vastly smaller. While these
+              models worked to reconstruct the inputs, they didn't quite learn a
+              latent timbre distribution. You can play around with the
+              pretrained model I trained in <Link
+                href="https://colab.research.google.com/drive/1lhhcQULdbhYq8xGuE3NLRvAZRAgs2Vas">
+                <a>this Colab notebook</a>
+              </Link>.
+            </p>
+          </div>
+
+        </div>
       </main>
 
       <footer className={styles.footer}>
