@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 
 const Dropdown = ({ label, values, selectedValue, changeHandler }) => (
   <div className={styles.colcontainer}>
@@ -22,11 +22,27 @@ export default function Home() {
 
   const [sourceInstrument, setSourceInstrument] = useState('Piano')
   const [targetInstrument, setTargetInstrument] = useState('Cello')
-  const instrumentShortNames = { 'Piano': 'Pno', 'Cello': 'Vc' }
+  const instrumentShortNames = {
+    'French horn': 'Fhn', 'Trumpet': 'Trop', 'Piano': 'Pno', 'Cello': 'Vc'
+  }
+  const instrumentNotes = {
+    'Piano': ['B3', 'G6', 'F3', 'D3'],
+    'Cello': ['B3', 'D5', 'F3'],
+    'French horn': ['D5'],
+    'Trumpet': ['D5', 'F3']
+  }
+  const notes = instrumentNotes[sourceInstrument]
+  const [currentNote, setCurrentNote] = useState(notes[0])
+
+  useEffect(() => {
+    setCurrentNote(instrumentNotes[sourceInstrument][0])
+    updateAudioPlayback()
+  }, [sourceInstrument])
+
   const instruments = Object.keys(instrumentShortNames)
   const sourceInstrumentShort = instrumentShortNames[sourceInstrument]
   const targetInstrumentShort = instrumentShortNames[targetInstrument]
-  const filenameNoExt = `/interpolation_samples/${sourceInstrumentShort}_${targetInstrumentShort}_${alphaString}`
+  const filenameNoExt = `/interpolation_samples/${sourceInstrumentShort}_${targetInstrumentShort}_${alphaString}_${currentNote}`
 
   const updateAudioPlayback = () => {
     if (audioRef.current) {
@@ -40,11 +56,15 @@ export default function Home() {
     updateAudioPlayback()
   }
   const updateInterpolationSource = (e) => {
-    setSourceInstrument(parseFloat(e.target.value))
+    setSourceInstrument(e.target.value)
     updateAudioPlayback()
   }
   const updateInterpolationTarget = (e) => {
-    setTargetInstrument(parseFloat(e.target.value))
+    setTargetInstrument(e.target.value)
+    updateAudioPlayback()
+  }
+  const updateInterpolationNote = (e) => {
+    setCurrentNote(e.target.value)
     updateAudioPlayback()
   }
 
@@ -64,6 +84,12 @@ export default function Home() {
         <p className={styles.description}>Ketan Agrawal &bull; Music 220c Final Project</p>
 
 
+        <Dropdown
+          label="Note: "
+          values={notes}
+          selectedValue={currentNote}
+          changeHandler={updateInterpolationNote}
+        />
         <div className={styles.rowcontainer}>
           <Dropdown
             label="Source instrument: "
