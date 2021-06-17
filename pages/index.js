@@ -20,6 +20,7 @@ export default function Home() {
         </h1>
 
         <p className={styles.description}>Ketan Agrawal &bull; Music 220c Final Project</p>
+        <p className={styles.description}>(note: may need to turn volume up)</p>
 
         <div className={styles.rowcontainer}>
           <div style={{ 'marginRight': '1rem' }}>
